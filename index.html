@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Stats Perform - Matrice Contenuti & Servizi</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f5f5f5;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    /* HEADER FISSO */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(135deg, #1f2121 0%, #213541 100%);
+      color: white;
+      padding: 20px 40px;
+      z-index: 1000;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .header-container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .header-title h1 {
+      font-size: 28px;
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+
+    .header-title p {
+      font-size: 16px;
+      opacity: 0.9;
+    }
+
+    .nav-buttons {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .nav-btn {
+      padding: 10px 18px;
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: white;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .nav-btn:hover {
+      background: rgba(255, 255, 255, 0.25);
+      border-color: rgba(255, 255, 255, 0.5);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+      transform: translateY(-1px);
+    }
+
+    .nav-btn:active {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(0);
+    }
+
+    /* MAIN CONTENT */
+    main {
+      margin-top: 180px;
+      padding: 40px;
+      max-width: 1400px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* TABELLA */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      margin-bottom: 40px;
+    }
+
+    thead {
+      background: #217285;
+      color: white;
+      font-weight: 600;
+    }
+
+    th {
+      padding: 18px;
+      text-align: left;
+      border: 1px solid #1a5968;
+      font-size: 16px;
+    }
+
+    td {
+      padding: 18px;
+      border: 1px solid #e0e0e0;
+      vertical-align: top;
+      font-size: 16px;
+    }
+
+    /* COLORI PER CATEGORIA */
+    /* Data Feeds & AI - Azzurro */
+    tr.cat-data-feeds {
+      background-color: #e3f2fd;
+    }
+    tr.cat-data-feeds:hover {
+      background-color: #bbdefb;
+    }
+
+    /* Video - Viola */
+    tr.cat-video {
+      background-color: #f3e5f5;
+    }
+    tr.cat-video:hover {
+      background-color: #e1bee7;
+    }
+
+    /* Editorial & Live Text - Verde */
+    tr.cat-editorial {
+      background-color: #e8f5e9;
+    }
+    tr.cat-editorial:hover {
+      background-color: #c8e6c9;
+    }
+
+    /* Interactive & Gamification - Arancione */
+    tr.cat-interactive {
+      background-color: #fff3e0;
+    }
+    tr.cat-interactive:hover {
+      background-color: #ffe0b2;
+    }
+
+    /* Broadcast & Studio - Rosa */
+    tr.cat-broadcast {
+      background-color: #fce4ec;
+    }
+    tr.cat-broadcast:hover {
+      background-color: #f8bbd0;
+    }
+
+    /* Other Sports - Giallo */
+    tr.cat-other {
+      background-color: #f1f8e9;
+    }
+    tr.cat-other:hover {
+      background-color: #dcedc8;
+    }
+
+    .categoria {
+      font-weight: 600;
+      width: 15%;
+      min-width: 120px;
+    }
+
+    .categoria.data-feeds { color: #1976d2; }
+    .categoria.video { color: #7b1fa2; }
+    .categoria.editorial { color: #388e3c; }
+    .categoria.interactive { color: #f57c00; }
+    .categoria.broadcast { color: #c2185b; }
+    .categoria.other { color: #689f38; }
+
+    .tipologia {
+      font-weight: 600;
+      width: 18%;
+      min-width: 140px;
+      color: #1a5968;
+    }
+
+    .descrizione {
+      width: 32%;
+      min-width: 200px;
+      line-height: 1.5;
+    }
+
+    .formati {
+      width: 18%;
+      min-width: 150px;
+      color: #555;
+    }
+
+    .copertura {
+      width: 17%;
+      min-width: 150px;
+      color: #555;
+    }
+
+    /* SEZIONI SOTTO LA TABELLA */
+    .section {
+      background: white;
+      padding: 30px;
+      margin-bottom: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .section h2 {
+      color: #217285;
+      margin-bottom: 20px;
+      font-size: 22px;
+      border-bottom: 3px solid #217285;
+      padding-bottom: 10px;
+    }
+
+    .section h3 {
+      color: #1a5968;
+      margin-top: 15px;
+      margin-bottom: 10px;
+      font-size: 16px;
+    }
+
+    .section ul, .section li {
+      margin-left: 20px;
+      margin-bottom: 8px;
+    }
+
+    .section p {
+      margin-bottom: 10px;
+      color: #555;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 1024px) {
+      header {
+        padding: 15px 20px;
+      }
+
+      .nav-buttons {
+        gap: 8px;
+      }
+
+      .nav-btn {
+        padding: 8px 14px;
+        font-size: 12px;
+      }
+
+      main {
+        margin-top: 160px;
+        padding: 20px;
+      }
+
+      th, td {
+        padding: 12px;
+        font-size: 12px;
+      }
+
+      .header-title h1 {
+        font-size: 22px;
+      }
+
+      .header-title p {
+        font-size: 12px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      header {
+        padding: 12px 15px;
+      }
+
+      .header-top {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+      }
+
+      main {
+        margin-top: 200px;
+        padding: 15px;
+      }
+
+      table {
+        font-size: 11px;
+      }
+
+      th, td {
+        padding: 10px;
+      }
+
+      .nav-btn {
+        padding: 7px 12px;
+        font-size: 11px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- HEADER FISSO -->
+  <header>
+    <div class="header-container">
+      <div class="header-top">
+        <div class="header-title">
+          <h1>📊 Stats Perform</h1>
+          <p>Contenuti, Servizi, Diritti Sportivi</p>
+        </div>
+        <div class="nav-buttons">
+          <button class="nav-btn" onclick="smoothScrollToSection('#tabella')">Matrice</button>
+          <button class="nav-btn" onclick="smoothScrollToSection('#diritti')">Diritti</button>
+          <button class="nav-btn" onclick="smoothScrollToSection('#tecnologie')">Tecnologie</button>
+          <button class="nav-btn" onclick="smoothScrollToSection('#esempi')">Esempi</button>
+          <button class="nav-btn" onclick="smoothScrollToSection('#note')">Note</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- CONTENUTO PRINCIPALE -->
+  <main>
+    <!-- TABELLA -->
+    <section id="tabella">
+      <table>
+        <thead>
+          <tr>
+            <th>CATEGORIA</th>
+            <th>TIPOLOGIA</th>
+            <th>DESCRIZIONE</th>
+            <th>FORMATI & ACCESSO</th>
+            <th>COPERTURA & DIRITTI</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- DATA FEEDS & AI -->
+          <tr class="cat-data-feeds">
+            <td class="categoria data-feeds">Data Feeds & AI</td>
+            <td class="tipologia">Opta Data Feeds</td>
+            <td class="descrizione">Dati evento, giocatore, squadra, play-by-play, advanced analytics (xG, momentum, tracking, win probability, fitness metrics, AI-driven insights)</td>
+            <td class="formati">API, Feed, Widgets, Visualizzazioni integrate</td>
+            <td class="copertura">Copertura globale: 500.000+ partite, 3.900 competizioni (Premier League, Bundesliga, Serie A, LaLiga, MLS, CONMEBOL, Concacaf, USL, NWSL, Saudi Pro League, WSL, UEFA WCL)</td>
+          </tr>
+          <tr class="cat-data-feeds">
+            <td class="categoria data-feeds">Data Feeds & AI</td>
+            <td class="tipologia">AI Models & Predictions</td>
+            <td class="descrizione">8 modelli AI su 7,2 petabyte di dati - previsioni, pattern, metriche avanzate</td>
+            <td class="formati">API, Integrazione broadcast, dashboard</td>
+            <td class="copertura">Disponibili su oltre 40.000+ eventi annuali: soccer, tennis, basket, rugby, cricket, motori</td>
+          </tr>
+
+          <!-- VIDEO -->
+          <tr class="cat-video">
+            <td class="categoria video">Video</td>
+            <td class="tipologia">Highlights & Ready Clips</td>
+            <td class="descrizione">Clip highlight partite, azioni chiave, gol, best-of giocatori - fino a 8.000 clip/anno (5.000 soccer)</td>
+            <td class="formati">Page-ready, clean versions, social formats, vertical/video brevissimi</td>
+            <td class="copertura">Diritti: Bundesliga, Saudi Pro League (con Cristiano Ronaldo), WSL, UEFA WCL, NBA, ATP, WTA, NFL, MLB, NHL, Cricket, Rugby, Motori</td>
+          </tr>
+          <tr class="cat-video">
+            <td class="categoria video">Video</td>
+            <td class="tipologia">Social Video</td>
+            <td class="descrizione">Clips veloce, soundbite, insights Opta, vertical & instant per social/digital</td>
+            <td class="formati">Social, branded, personalizzabili</td>
+            <td class="copertura">Integrazione per operatori/digital media, focus engagement</td>
+          </tr>
+          <tr class="cat-video">
+            <td class="categoria video">Video</td>
+            <td class="tipologia">Uncut/Raw Video</td>
+            <td class="descrizione">Materiale grezzo: conferenze stampa, allenamenti, post-partita, reaction</td>
+            <td class="formati">Accesso diretto newsroom, editor integrato</td>
+            <td class="copertura">Partite top leagues, tornei; archive conferenze, training, press conferences</td>
+          </tr>
+          <tr class="cat-video">
+            <td class="categoria video">Video</td>
+            <td class="tipologia">Multi-Match Highlights Hub</td>
+            <td class="descrizione">Playlist personalizzata di instant highlights da più partite/competizioni in parallelo</td>
+            <td class="formati">Streaming sportsbook, playlist/reel</td>
+            <td class="copertura">Soccer, tennis, basket, rugby, motori, onboarding RedZone-style sportsbook</td>
+          </tr>
+          <tr class="cat-video">
+            <td class="categoria video">Video</td>
+            <td class="tipologia">PressBox Video</td>
+            <td class="descrizione">Video portal per produzione interna, esportazione, integrazione social & digital</td>
+            <td class="formati">Portal, editor, deep search/transcript</td>
+            <td class="copertura">Accesso multi-lingua e archivio eventi sportivi, editor avanzato</td>
+          </tr>
+
+          <!-- EDITORIAL & LIVE TEXT -->
+          <tr class="cat-editorial">
+            <td class="categoria editorial">Editorial & Live Text</td>
+            <td class="tipologia">News Articles & Editorials</td>
+            <td class="descrizione">12.000 articoli/anno (ENG), 5.000 LATAM Spanish; previews, report, transfer news, interviste, features</td>
+            <td class="formati">Testuale, broadcast, digital, wire service</td>
+            <td class="copertura">Focus su calcio (main), ma anche NBA, Tennis, Cricket, F1, Rugby, Golf; Opta Data driven</td>
+          </tr>
+          <tr class="cat-editorial">
+            <td class="categoria editorial">Editorial & Live Text</td>
+            <td class="tipologia">Live Text Commentary</td>
+            <td class="descrizione">Copertura testuale in tempo reale (aggiornamenti ogni 2-3 min), standings, statistiche</td>
+            <td class="formati">Widget/API, moduli integrabili</td>
+            <td class="copertura">Multilingue: ENG, GER, ITA, ESP, PT-BR</td>
+          </tr>
+          <tr class="cat-editorial">
+            <td class="categoria editorial">Editorial & Live Text</td>
+            <td class="tipologia">Data-Led Features</td>
+            <td class="descrizione">Approfondimenti, analisi, previsioni, metriche, storytelling con Opta stats</td>
+            <td class="formati">Articoli, segmenti TV/radio, infografiche</td>
+            <td class="copertura">Per broadcaster, digital publisher, betting operator</td>
+          </tr>
+
+          <!-- INTERACTIVE & GAMIFICATION -->
+          <tr class="cat-interactive">
+            <td class="categoria interactive">Interactive & Gamification</td>
+            <td class="tipologia">Opta Widgets</td>
+            <td class="descrizione">Moduli pronti all'uso: live scores, match stats, standings, prop betting, visualizzazioni, overlay</td>
+            <td class="formati">Widget embed (sito/app), API</td>
+            <td class="copertura">Customizzabili, fast-integration, multi-sport</td>
+          </tr>
+          <tr class="cat-interactive">
+            <td class="categoria interactive">Interactive & Gamification</td>
+            <td class="tipologia">Fantasy Gaming</td>
+            <td class="descrizione">Dati, stats, predictor, analytics per fantasy sports (calcio, basket ecc.)</td>
+            <td class="formati">API, integrabili piattaforme</td>
+            <td class="copertura">Stats, predictor, leaderboard, gamification features</td>
+          </tr>
+          <tr class="cat-interactive">
+            <td class="categoria interactive">Interactive & Gamification</td>
+            <td class="tipologia">Predictors & Live Odds</td>
+            <td class="descrizione">Predictor (match, player, xG), odds live, leaderboard live, betslip click-in-stream</td>
+            <td class="formati">Overlay AI, sportsbook integration</td>
+            <td class="copertura">Attivo su 14+ sport e 40.000+ eventi/anno</td>
+          </tr>
+
+          <!-- BROADCAST & STUDIO -->
+          <tr class="cat-broadcast">
+            <td class="categoria broadcast">Broadcast & Studio</td>
+            <td class="tipologia">OptaAI Studio, Opta Vision</td>
+            <td class="descrizione">Analisi avanzata in tempo reale, shape analysis, fitness metrics, storyboard AI-driven per TV</td>
+            <td class="formati">Broadcasting tools, content player, AI-driven metrics</td>
+            <td class="copertura">Usato da BBC Sport, finalist e vincitore premi broadcast 2025, Euro 2024</td>
+          </tr>
+          <tr class="cat-broadcast">
+            <td class="categoria broadcast">Broadcast & Studio</td>
+            <td class="tipologia">Content Agency</td>
+            <td class="descrizione">Creatività su misura: quiz, video studio, interviste, brand campaign, podcast, branded content</td>
+            <td class="formati">Studio show, radio, TV, social, OOH, print</td>
+            <td class="copertura">Focus engagement, marketing multi-piattaforma</td>
+          </tr>
+
+          <!-- OTHER SPORTS -->
+          <tr class="cat-other">
+            <td class="categoria other">Other Sports</td>
+            <td class="tipologia">Tennis & ATP/WTA</td>
+            <td class="descrizione">Highlights, press conferences, season features</td>
+            <td class="formati">Video, testuale (ENG)</td>
+            <td class="copertura">Australian/French/US Open, top seeds ATP/WTA</td>
+          </tr>
+          <tr class="cat-other">
+            <td class="categoria other">Other Sports</td>
+            <td class="tipologia">Basketball (NBA)</td>
+            <td class="descrizione">Highlights, press conferences, news NBA/stars</td>
+            <td class="formati">Video, live testuale, editorial features</td>
+            <td class="copertura">NBA: LeBron, Curry, Doncic, Giannis ecc.</td>
+          </tr>
+          <tr class="cat-other">
+            <td class="categoria other">Other Sports</td>
+            <td class="tipologia">Football Americano (NFL, MLB, NHL)</td>
+            <td class="descrizione">Breaking news, playoff/World Series/Stanley Cup press conferences</td>
+            <td class="formati">Video, testuale, infografiche</td>
+            <td class="copertura">NFL, MLB, NHL: copertura playoff e regular season</td>
+          </tr>
+          <tr class="cat-other">
+            <td class="categoria other">Other Sports</td>
+            <td class="tipologia">Rugby & Cricket</td>
+            <td class="descrizione">Coverage major/selected events (Six Nations, Rugby Championship, ICC World Test)</td>
+            <td class="formati">Video, testo, social</td>
+            <td class="copertura">DP World Tour/LIV Golf, main cricket tours</td>
+          </tr>
+          <tr class="cat-other">
+            <td class="categoria other">Other Sports</td>
+            <td class="tipologia">Motorsports & Boxing</td>
+            <td class="descrizione">Race previews, review, AI insights; press/fight conferences & weigh-ins</td>
+            <td class="formati">Video, testuale, highlight AI</td>
+            <td class="copertura">Formula 1, major boxing events</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- DIRITTI SPORTIVI -->
+    <section id="diritti" class="section">
+      <h2>⚽ Diritti Sportivi</h2>
+
+      <h3>Calcio</h3>
+      <ul>
+        <li>Saudi Pro League</li>
+        <li>Bundesliga</li>
+        <li>WSL (Women's Super League)</li>
+        <li>UEFA Women's Champions League (UEFA WCL)</li>
+        <li>Premier League</li>
+        <li>Serie A</li>
+        <li>LaLiga</li>
+        <li>Ligue 1</li>
+        <li>Champions League / Europa League</li>
+        <li>CONMEBOL / Concacaf</li>
+        <li>NWSL / USL</li>
+      </ul>
+
+      <h3>Coppa del Mondo</h3>
+      <ul>
+        <li>✓ Press conferences, data video, fan colour</li>
+        <li>✗ NO match highlights from FIFA</li>
+      </ul>
+
+      <h3>Women's Soccer</h3>
+      <ul>
+        <li>WSL highlights</li>
+        <li>UEFA WCL press conferences</li>
+        <li>News stories on merit</li>
+        <li>WSL top clubs weekly coverage</li>
+      </ul>
+
+      <h3>Altri Sport</h3>
+      <ul>
+        <li>NBA</li>
+        <li>NFL, MLB, NHL</li>
+        <li>Rugby, Cricket</li>
+        <li>Tennis (ATP/WTA)</li>
+        <li>Motorsport, Golf</li>
+        <li>Boxing</li>
+      </ul>
+    </section>
+
+    <!-- TECNOLOGIE -->
+    <section id="tecnologie" class="section">
+      <h2>🛠️ Tecnologie & Accesso</h2>
+      <ul>
+        <li><strong>PressBox Video Portal</strong> - Video, highlights, asset management, editor integrato, transcript key-lines</li>
+        <li><strong>Content Player & Content Player Pro</strong> - Integrazione facile con sportsbook/media, attivazione overlay AI "one line of code"</li>
+        <li><strong>Opta Search / Opta Graphics / Opta Live</strong> - Ricerca storica, visual storytelling, dati contestuali on-demand</li>
+        <li><strong>APIs</strong> - Per broadcaster, publisher, betting, digital/OTT</li>
+        <li><strong>Widgets & Plug&Play</strong> - Visualizzazioni, leaderboard, quiz, predictor, prop betting, fan engagement</li>
+        <li><strong>AI-driven overlay e live stats</strong> - Integrazione real-time negli stream</li>
+      </ul>
+    </section>
+
+    <!-- ESEMPI PRATICI -->
+    <section id="esempi" class="section">
+      <h2>💡 Esemplificazioni Pratiche</h2>
+
+      <h3>Instant Highlights</h3>
+      <p>Highlights in tempo reale, multi-match, playlist parallele per sportsbook/digital experience</p>
+
+      <h3>Overlay AI</h3>
+      <p>Live stats squadra/giocatore, xG shot maps, momentum visualisation, live odds, prop betting, add to bet slip</p>
+
+      <h3>Editorial Wire</h3>
+      <p>Articoli in diverse lingue, profondi e data-driven, interviste, preview, transfer, feature stories, anche per mercati locali (latam)</p>
+
+      <h3>Live Text</h3>
+      <p>Match commentaries per publisher/app, engagement real-time su score, stats, cambiamenti partita</p>
+    </section>
+
+    <!-- NOTE COMMERCIALI -->
+    <section id="note" class="section">
+      <h2>📋 Note Commerciali & Operative</h2>
+      <ul>
+        <li><strong>Flessibilità del piano contenuti</strong> - Custom, adattabile, priorità su highlights, conferenze, copertura estesa di premi, training session e breaking news</li>
+        <li><strong>Enrichment per podcast, social e branded campaign</strong> - Data-led storytelling, milestone, quiz, video, infografiche</li>
+        <li><strong>Archivio best-of, webinar, studio show</strong> - Integration B2B/B2C con focus su audience/revenue growth</li>
+        <li><strong>Licensing content</strong> - Con focus su audience/revenue growth e partnership strategic</li>
+      </ul>
+    </section>
+  </main>
+
+  <script>
+    function smoothScrollToSection(sectionId) {
+      const element = document.querySelector(sectionId);
+      if (!element) return;
+
+      // L'header è 180px di altezza (vedi margin-top del main)
+      // Aggiungiamo un po' di padding extra per una migliore visualizzazione
+      const headerHeight = 180;
+      const extraPadding = 10; // padding aggiuntivo
+
+      // Ottieni la posizione dell'elemento rispetto al top della pagina
+      const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
+
+      // Sottrai l'altezza dell'header + padding per posizionarlo correttamente
+      const offsetPosition = elementPosition - headerHeight - extraPadding;
+
+      // Scroll smooth alla posizione corretta
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      });
+    }
+  </script>
+</body>
+</html>
